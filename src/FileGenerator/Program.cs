@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.IO;
+using System.Collections.Generic;
 
 namespace FileGenerator
 {
@@ -51,19 +52,23 @@ namespace FileGenerator
             try
             {
                 var basePath = args[0];
-
-                var threads = new Thread[] {
-                    CreateFiles("0", basePath, 100000),
-                    CreateFiles("1", basePath, 100000),
-                    CreateFiles("2", basePath, 100000),
-                    CreateFiles("3", basePath, 100000),
-                    CreateFiles("4", basePath, 100000),
-                    CreateFiles("5", basePath, 100000),
-                    CreateFiles("6", basePath, 100000),
-                    CreateFiles("7", basePath, 100000),
-                    CreateFiles("8", basePath, 100000),
-                    CreateFiles("9", basePath, 100000)
-                };
+                uint hundredThousand = 100000;
+                uint numOfFiles = Convert.ToUInt32(args[1]);
+                List<Thread> threads= new List<Thread>();
+                if(numOfFiles < hundredThousand)
+                {
+                    threads.Add(CreateFiles("0", basePath, numOfFiles));
+                }
+                else
+                {
+                    int i = 0;
+                    while(numOfFiles > hundredThousand)
+                    {
+                        threads.Add(CreateFiles(i++.ToString(), basePath, hundredThousand));
+                        numOfFiles -= hundredThousand;
+                    }
+                    threads.Add(CreateFiles(i++.ToString(), basePath, numOfFiles));
+                }
 
                 foreach (var thread in threads)
                 {
