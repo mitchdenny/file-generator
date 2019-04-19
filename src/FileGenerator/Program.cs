@@ -41,7 +41,7 @@ namespace FileGenerator
 
         public static int Main(string[] args)
         {
-            if (args.Length != 1 || Directory.Exists(args[0]))
+            if (Directory.Exists(args[0]))
             {
                 Console.WriteLine("ERROR: Must specify path.");
                 Console.WriteLine();
